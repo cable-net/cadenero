@@ -9,5 +9,5 @@ app.use('/api/health', healthRoutes)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-    console.log(`servidor andando en: ${PORT}`)
+  console.warn(`servidor andando en: ${PORT}`)
 })

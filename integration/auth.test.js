@@ -8,11 +8,11 @@ chai.use(chaiHttp)
 describe('Pruebas de integracion para un nuevo usuario', () => {
   it('Registro Exitoso', (done) => {
     const usuario = {
-        email: "a45srgh@gmail.com",
-        password: "123456",
-        user_id: "ab123456",
-        user_type: "colaborador",
-        role: "A"
+      email: 'a45srgh@gmail.com',
+      password: '123456',
+      user_id: 'ab123456',
+      user_type: 'colaborador',
+      role: 'A'
     }
     chai
       .request(app)

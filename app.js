@@ -4,12 +4,12 @@ const app = express()
 
 require('dotenv').config()
 
-const uri = `mongodb+srv://${process.env.USUARIO}:${process.env.PASSWORD}@cluster0.d7vx9.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.USUARIO}:${process.env.PASSWORD}@cluster0.d7vx9.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`
 mongoose.connect(uri,
-    { useNewUrlParser: true, useUnifiedTopology: true }
+  { useNewUrlParser: true, useUnifiedTopology: true }
 )
-.then(() => console.warn('Base de datos conectada'))
-.catch(e => console.warn('error db:', e))
+  .then(() => console.warn('Base de datos conectada'))
+  .catch(e => console.warn('error db:', e))
 
 const healthRoutes = require('./routes/health')
 const authRoutes = require('./routes/auth')

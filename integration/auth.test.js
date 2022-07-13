@@ -12,7 +12,7 @@ describe('Pruebas de integracion para un nuevo usuario', () => {
         password: "123456",
         user_id: "ab123456",
         user_type: "colaborador",
-        role: "ADMIN"
+        role: "A"
     }
     chai
       .request(app)

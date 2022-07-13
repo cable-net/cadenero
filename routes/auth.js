@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt')
 router.post('/register', async (req, res) => {
   const salt = await bcrypt.genSalt(10)
   const passwordHash = await bcrypt.hash(req.body.password, salt)
-
   const usuario = new Usuario({
     email: req.body.email,
     password: passwordHash,
@@ -15,10 +14,10 @@ router.post('/register', async (req, res) => {
     role: req.body.role
   })
   try {
-    await usuario.save()
+    const savedUsuario = await usuario.save()
     res
       .status(201)
-      .json({ })
+      .json(savedUsuario)
   } catch (error) {
     res.status(400).json({ error })
   }

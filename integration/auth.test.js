@@ -1,27 +1,33 @@
 const chai = require('chai')
-const chaiHttp = require('chai-http')
-const assert = chai.assert
+const expect = chai.expect
+const request = require('supertest')
+const mongoose = require('mongoose')
 
 const app = require('../app')
-chai.use(chaiHttp)
+const Usuario = require('../models/usuario')
 
-describe('Pruebas de integracion para un nuevo usuario', () => {
-  it('Registro Exitoso', (done) => {
-    const usuario = {
-      email: 'a45srgh@gmail.com',
-      password: '123456',
-      user_id: 'ab123456',
-      user_type: 'colaborador',
-      role: 'A'
-    }
-    chai
-      .request(app)
-      .post('/api/auth/register')
-      .send(usuario)
-      .end((_err, res) => {
-        assert.equal(res.statusCode, 201)
-        assert.isEmpty(res.body)
-        done()
-      })
+describe('api/users', () => {
+  before(async () => {
+    // before each test delete all users table data
+    await Usuario.deleteMany({})
+  })
+
+  after(async () => {
+    mongoose.disconnect()
+  })
+
+  describe('POST /', () => {
+    it('should return user when the all request body is valid', async () => {
+      const usuario = {
+        email: 'a45srgh@gmail.com',
+        password: '1q2w3e4r',
+        user_id: '62ce8f01c62c6a277bba2e31',
+        user_type: 'cliente',
+        role: 'SUPERVISOR'
+      }
+      const res = await request(app).post('/api/auth/register').send(usuario)
+      expect(res.status).to.equal(201)
+      expect(res.body).to.have.include.keys('_id', 'date')
+    })
   })
 })

@@ -14,7 +14,7 @@ const usuarioSchema = mongoose.Schema({
   },
   userId: {
     type: mongoose.Schema.ObjectId,
-    required: true   
+    required: true
   },
   userType: {
     type: String,
@@ -24,7 +24,7 @@ const usuarioSchema = mongoose.Schema({
   role: {
     type: String,
     required: true,
-    enum: ['TECNICO', 'CAJERO', 'SUPERVISOR', 'CLIENTE']         
+    enum: ['TECNICO', 'CAJERO', 'SUPERVISOR', 'CLIENTE']
   },
   date: {
     type: Date,

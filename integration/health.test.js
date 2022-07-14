@@ -1,19 +1,13 @@
 const chai = require('chai')
-const chaiHttp = require('chai-http')
-const assert = chai.assert
+const expect = chai.expect
+const request = require('supertest')
 
 const app = require('../app')
-chai.use(chaiHttp)
 
 describe('Integration Test', () => {
-  it('Gets status health from endpoint', (done) => {
-    chai
-      .request(app)
-      .get('/api/health/status')
-      .end((_err, res) => {
-        assert.equal(res.statusCode, 200)
-        assert.equal(res.body.status, 'ok')
-        done()
-      })
+  it('Gets status health from endpoint', async () => {
+    const res = await request(app).get('/api/health/status')
+    expect(res.status).to.equal(200)
+    expect(res.body.status).to.equal('ok')
   })
 })

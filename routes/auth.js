@@ -3,6 +3,7 @@ const router = express.Router()
 const Usuario = require('../models/usuario')
 const bcrypt = require('bcrypt')
 const Joi = require('@hapi/joi')
+const jwt = require('jsonwebtoken')
 
 const schemaRegister = Joi.object({
   email: Joi.string().min(6).max(255).required().email(),
@@ -10,6 +11,11 @@ const schemaRegister = Joi.object({
   user_id: Joi.string().min(24).max(24).required(),
   user_type: Joi.string().valid('cliente', 'colaborador').required(),
   role: Joi.string().valid('TECNICO', 'CAJERO', 'SUPERVISOR', 'CLIENTE').required()
+})
+
+const schemaLogin = Joi.object({
+  email: Joi.string().min(6).max(255).required().email(),
+  password: Joi.string().min(6).max(100).required()
 })
 
 router.post('/register', async (req, res) => {
@@ -42,6 +48,26 @@ router.post('/register', async (req, res) => {
   } catch (error) {
     res.status(400).json({ error })
   }
+})
+
+router.post('/login', async (req, res) => {
+  const { error } = schemaLogin.validate(req.body)
+  if (error) return res.status(400).json({ error: 'Verifique sus datos' })
+
+  const usuario = await Usuario.findOne({ email: req.body.email })
+  if (!usuario) return res.status(400).json({ error: 'Verifique sus datos' })
+
+  const validPassword = await bcrypt.compare(req.body.password, usuario.password)
+  if (!validPassword) return res.status(400).json({ error: 'Verifique sus datos' })
+
+  const tokenJwt = jwt.sign({
+    nombre: usuario.nombre,
+    id: usuario._id
+  }, process.env.TOKEN_SECRET)
+
+  res.header('auth-token', tokenJwt).status(200).json({
+    token: tokenJwt
+  })
 })
 
 module.exports = router

@@ -127,5 +127,6 @@ describe('Pruebas para la autenticacion en la plataforma', () => {
       expect(res.status).to.equal(400)
       expect(res.body.error).to.equal('Verifique sus datos')
     })
+     
   })
 })

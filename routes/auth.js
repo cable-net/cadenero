@@ -69,7 +69,8 @@ router.post('/login', async (req, res) => {
     token: tokenJwt
   })
 })
-router.get('/:email/registered', async (req, res) => {
+
+router.get('/email/:email/registered', async (req, res) => {
   const email = req.params.email
     console.log('email desde backend', email)
     try {

@@ -72,35 +72,17 @@ router.post('/login', async (req, res) => {
 
 router.get('/email/:email/registered', async (req, res) => {
   const email = req.params.email
-    console.log('email desde backend', email)
+  
     try {
-        const isEmailExist = await Usuario.findOne({  email: email  })
-        console.log(isEmailExist)
-            if (isEmailExist) {
-              res.json({
-                estado: true,
-                mensaje: 'el email existe'
-            })
+        const isEmailExist = await Usuario.findOne({  email: email  })      
+          if (isEmailExist) {
+              res.status(200).json({ })
         } else {
-            res.json({
-                estado: false,
-                mensaje: 'el email no existe'
-            })
+            res.status(404).json({ })
         }   
     } catch (error) {
-        console.log(error)
+      
     }
 })
-  //const email = req.params.email
-  //isEmailExist = usuario.findOne({ email: email })
-    //    if (isEmailExist) {
-           // console.log( email)
-           // return res.status(200).json({ })
-        //} else {
-           // return res.status(400).json({ })
-           
-      //  }
-  //})
-
 
 module.exports = router

@@ -143,9 +143,9 @@ describe('Pruebas para la autenticacion en la plataforma', () => {
       const res = await request(app).get('/api/auth/email/pruebaemail@gmail.com/registered')
       expect(res.status).to.equal(200)
     })
-    it('deberia retornar 404 porque el email no existe', async () => {
-      const res = await request(app).get('/api/auth/email/pruebaemailfail@gmail.com/registered')
-      expect(res.status).to.equal(404)
-    })    
-  })
+    it('deberia retornar 404 porque el email no existe', async () => { 
+    const res = await request(app).get('/api/auth/email/pruebaemailfail23@gmail.com/registered')
+    expect(res.status).to.equal(404)    
+    })
+  })    
 })

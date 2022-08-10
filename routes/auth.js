@@ -1,17 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const Usuario = require('../models/usuario')
+const adapter = require('../adapters/usuario')
 const bcrypt = require('bcrypt')
 const Joi = require('@hapi/joi')
 const jwt = require('jsonwebtoken')
-
-const schemaRegister = Joi.object({
-  email: Joi.string().min(6).max(255).required().email(),
-  password: Joi.string().min(6).max(100).required(),
-  user_id: Joi.string().min(24).max(24).required(),
-  user_type: Joi.string().valid('cliente', 'colaborador').required(),
-  role: Joi.string().valid('TECNICO', 'CAJERO', 'SUPERVISOR', 'CLIENTE').required()
-})
 
 const schemaLogin = Joi.object({
   email: Joi.string().min(6).max(255).required().email(),
@@ -19,7 +12,7 @@ const schemaLogin = Joi.object({
 })
 
 router.post('/register', async (req, res) => {
-  const { error } = schemaRegister.validate(req.body)
+  const [error, model] = adapter.bodyToModel(req.body)
   if (error) {
     return res.status(400).json(
       { error: 'Datos invalidos' }
@@ -35,13 +28,8 @@ router.post('/register', async (req, res) => {
 
   const salt = await bcrypt.genSalt(10)
   const passwordHash = await bcrypt.hash(req.body.password, salt)
-  const usuario = new Usuario({
-    email: req.body.email,
-    password: passwordHash,
-    userId: req.body.user_id,
-    userType: req.body.user_type,
-    role: req.body.role
-  })
+  model.password = passwordHash
+  const usuario = new Usuario(model)
   try {
     const savedUsuario = await usuario.save()
     res.status(201).json(savedUsuario)

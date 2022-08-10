@@ -70,4 +70,19 @@ router.post('/login', async (req, res) => {
   })
 })
 
+router.get('/email/:email/registered', async (req, res) => {
+  const emailParams = req.params.email
+
+  try {
+    const isEmailExist = await Usuario.findOne({ email: emailParams })
+    if (isEmailExist) {
+      res.status(200).json({ })
+    } else {
+      res.status(404).json({ })
+    }
+  } catch (error) {
+    res.status(500).json({ })
+  }
+})
+
 module.exports = router

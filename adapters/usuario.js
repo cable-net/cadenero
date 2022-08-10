@@ -8,7 +8,7 @@ const schemaRegister = Joi.object({
   role: Joi.string().valid('TECNICO', 'CAJERO', 'SUPERVISOR', 'CLIENTE').required()
 })
 
-module.exports.bodyToModel = function(body) {
+module.exports.bodyToModel = function (body) {
   const { error } = schemaRegister.validate(body)
   if (error) {
     return [error]

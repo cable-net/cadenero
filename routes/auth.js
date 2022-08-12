@@ -3,13 +3,8 @@ const router = express.Router()
 const Usuario = require('../models/usuario')
 const adapter = require('../adapters/usuario')
 const bcrypt = require('bcrypt')
-const Joi = require('@hapi/joi')
 const jwt = require('jsonwebtoken')
-
-const schemaLogin = Joi.object({
-  email: Joi.string().min(6).max(255).required().email(),
-  password: Joi.string().min(6).max(100).required()
-})
+const adapters = require('../adapters/login')
 
 router.post('/register', async (req, res) => {
   const [error, model] = adapter.bodyToModel(req.body)
@@ -39,13 +34,16 @@ router.post('/register', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-  const { error } = schemaLogin.validate(req.body)
-  if (error) return res.status(400).json({ error: 'Verifique sus datos' })
-
-  const usuario = await Usuario.findOne({ email: req.body.email })
+  const [error, model] = adapters.bodyToLogin(req.body)
+  if (error) {
+    return res.status(400).json(
+      { error: 'Verifique sus datos' }
+    )
+  }
+  const usuario = await Usuario.findOne({ email: model.email })
   if (!usuario) return res.status(400).json({ error: 'Verifique sus datos' })
 
-  const validPassword = await bcrypt.compare(req.body.password, usuario.password)
+  const validPassword = await bcrypt.compare(model.password, usuario.password)
   if (!validPassword) return res.status(400).json({ error: 'Verifique sus datos' })
 
   const tokenJwt = jwt.sign({

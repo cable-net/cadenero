@@ -1,12 +1,17 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyparser = require('body-parser')
+const cors = require('cors')
 
 require('dotenv').config()
 
 const app = express()
 app.use(bodyparser.urlencoded({ extended: false }))
 app.use(bodyparser.json())
+
+app.use(cors({
+  origin: '*'
+}))
 
 const uri = `mongodb+srv://${process.env.USUARIO}:${process.env.PASSWORD}@cluster0.d7vx9.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`
 const options = { useNewUrlParser: true, useUnifiedTopology: true }

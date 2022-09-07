@@ -51,10 +51,10 @@ router.post('/login', async (req, res) => {
     nombre: usuario.nombre,
     id: usuario._id
   }, process.env.TOKEN_SECRET, {
-    expiresIn: logic.calculatedExpiresIn(process.env.TOKEN_EXPIRES_IN_HRS)
+    expiresIn: logic.calculatedExpiresIn(new Date(), process.env.TOKEN_EXPIRES_IN_HRS)
   })
 
-  const jwtContext = jwt.decode(tokenJwt, {complete: true})
+  const jwtContext = jwt.decode(tokenJwt, { complete: true })
 
   res.header('auth-token', tokenJwt).status(200).json({
     token: tokenJwt,

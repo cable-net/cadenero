@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Usuario = require('../models/usuario')
 const adapter = require('../adapters/usuario')
+const logic = require('../logic/auth')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const adapters = require('../adapters/login')
@@ -49,10 +50,15 @@ router.post('/login', async (req, res) => {
   const tokenJwt = jwt.sign({
     nombre: usuario.nombre,
     id: usuario._id
-  }, process.env.TOKEN_SECRET)
+  }, process.env.TOKEN_SECRET, {
+    expiresIn: logic.calculatedExpiresIn(process.env.TOKEN_EXPIRES_IN_HRS)
+  })
+
+  const jwtContext = jwt.decode(tokenJwt, {complete: true})
 
   res.header('auth-token', tokenJwt).status(200).json({
-    token: tokenJwt
+    token: tokenJwt,
+    exp: jwtContext.payload.exp
   })
 })
 

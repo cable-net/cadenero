@@ -20,5 +20,13 @@
             }
         ],
         "no-console": ["error", { "allow": ["warn", "error"] }]
-    }
+    },
+    "overrides": [
+        {
+            "files": ["*.test.js"],
+            "rules": {
+                "no-unused-expressions": "off"
+            }
+        }
+    ]
 }

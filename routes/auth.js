@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Usuario = require('../models/usuario')
+const Actividad = require('../models/actividad')
 const adapter = require('../adapters/usuario')
 const logic = require('../logic/auth')
 const bcrypt = require('bcrypt')
@@ -55,12 +56,20 @@ router.post('/login', async (req, res) => {
   })
 
   const jwtContext = jwt.decode(tokenJwt, { complete: true })
-
-  res.header('auth-token', tokenJwt).status(200).json({
-    token: tokenJwt,
-    exp: jwtContext.payload.exp
+ 
+  //const actividad = new Actividad({usuarioId: req.user.id, eventType: 'LOGIN'})
+ // try {
+    //actividad.save()
+       //console.log(res.body.id)
+  //} catch (error) {
+  //}
+   res.header('auth-token', tokenJwt).status(200).json({
+      token: tokenJwt,
+   exp: jwtContext.payload.exp
   })
 })
+
+
 
 router.get('/email/:email/registered', async (req, res) => {
   const emailParams = req.params.email

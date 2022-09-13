@@ -57,15 +57,15 @@ router.post('/login', async (req, res) => {
 
   const jwtContext = jwt.decode(tokenJwt, { complete: true })
  
-  //const actividad = new Actividad({usuarioId: req.user.id, eventType: 'LOGIN'})
- // try {
-    //actividad.save()
-       //console.log(res.body.id)
-  //} catch (error) {
-  //}
-   res.header('auth-token', tokenJwt).status(200).json({
-      token: tokenJwt,
-   exp: jwtContext.payload.exp
+  const actividad = new Actividad({usuarioId: usuario._id, eventType: 'LOGIN'})
+  try {
+    await actividad.save()
+  } catch (error) {
+    console.warn('Esta actividad no se guardo ' + actividad)
+  }
+  res.header('auth-token', tokenJwt).status(200).json({
+    token: tokenJwt,
+    exp: jwtContext.payload.exp
   })
 })
 

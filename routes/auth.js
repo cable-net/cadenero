@@ -56,8 +56,7 @@ router.post('/login', async (req, res) => {
   })
 
   const jwtContext = jwt.decode(tokenJwt, { complete: true })
- 
-  const actividad = new Actividad({usuarioId: usuario._id, eventType: 'LOGIN'})
+  const actividad = new Actividad({ usuarioId: usuario._id, eventType: 'LOGIN' })
   try {
     await actividad.save()
   } catch (error) {
@@ -68,8 +67,6 @@ router.post('/login', async (req, res) => {
     exp: jwtContext.payload.exp
   })
 })
-
-
 
 router.get('/email/:email/registered', async (req, res) => {
   const emailParams = req.params.email

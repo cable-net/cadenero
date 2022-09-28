@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Usuario = require('../models/usuario')
+const Actividad = require('../models/actividad')
 const adapter = require('../adapters/usuario')
 const logic = require('../logic/auth')
 const bcrypt = require('bcrypt')
@@ -55,7 +56,12 @@ router.post('/login', async (req, res) => {
   })
 
   const jwtContext = jwt.decode(tokenJwt, { complete: true })
-
+  const actividad = new Actividad({ usuarioId: usuario._id, eventType: 'LOGIN' })
+  try {
+    await actividad.save()
+  } catch (error) {
+    console.warn('Esta actividad no se guardo ' + actividad)
+  }
   res.header('auth-token', tokenJwt).status(200).json({
     token: tokenJwt,
     exp: jwtContext.payload.exp
